@@ -1,0 +1,15 @@
+# Catálogo de Livros - Dependências
+# Este projeto utiliza apenas bibliotecas padrão do Python 3.x
+
+# Python 3.7 ou superior é recomendado
+# As seguintes bibliotecas são utilizadas (todas fazem parte da biblioteca padrão):
+
+# tkinter - Interface gráfica (incluído no Python padrão)
+# sqlite3 - Banco de dados (incluído no Python padrão)
+# typing - Type hints (incluído no Python 3.5+)
+
+# Para executar o projeto:
+# python main.py
+
+# Não é necessário instalar dependências adicionais
+# Certifique-se de ter Python 3.7+ instalado 
