@@ -14,7 +14,6 @@ class CatalogoInterface:
         self.root.geometry("900x700")
         self.root.resizable(True, True)
         
-        # Inicializar o gerenciador de banco de dados
         try:
             self.db_manager = DatabaseManager()
         except Exception as e:
@@ -22,13 +21,10 @@ class CatalogoInterface:
             self.root.destroy()
             return
         
-        # Configurar estilo
         self.configurar_estilo()
         
-        # Criar interface
         self.criar_interface()
         
-        # Carregar dados iniciais
         self.atualizar_lista()
     
     def configurar_estilo(self):
@@ -36,39 +32,31 @@ class CatalogoInterface:
         style = ttk.Style()
         style.theme_use('clam')
         
-        # Configurar cores
         style.configure('Heading.TLabel', font=('Arial', 12, 'bold'))
         style.configure('Action.TButton', font=('Arial', 10))
     
     def criar_interface(self):
         """Cria todos os elementos da interface"""
-        # Frame principal
+
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Configurar redimensionamento
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         main_frame.grid_rowconfigure(2, weight=1)
         main_frame.grid_columnconfigure(1, weight=1)
         
-        # Título
         titulo = ttk.Label(main_frame, text="Catálogo de Livros", style='Heading.TLabel')
         titulo.grid(row=0, column=0, columnspan=2, pady=(0, 20))
         
-        # Frame de entrada de dados
         self.criar_frame_entrada(main_frame)
         
-        # Frame de botões
         self.criar_frame_botoes(main_frame)
         
-        # Frame da lista de livros
         self.criar_frame_lista(main_frame)
         
-        # Frame de busca
         self.criar_frame_busca(main_frame)
-        
-        # Barra de status
+
         self.criar_barra_status(main_frame)
     
     def criar_frame_entrada(self, parent):
@@ -76,7 +64,6 @@ class CatalogoInterface:
         frame_entrada = ttk.LabelFrame(parent, text="Dados do Livro", padding="10")
         frame_entrada.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N), padx=(0, 10))
         
-        # Variáveis para os campos
         self.var_codigo = tk.StringVar()
         self.var_titulo = tk.StringVar()
         self.var_autor = tk.StringVar()
@@ -84,7 +71,6 @@ class CatalogoInterface:
         self.var_editora = tk.StringVar()
         self.var_ano = tk.StringVar()
         
-        # Campos de entrada
         ttk.Label(frame_entrada, text="Código:").grid(row=0, column=0, sticky=tk.W, pady=2)
         self.entry_codigo = ttk.Entry(frame_entrada, textvariable=self.var_codigo, state='readonly')
         self.entry_codigo.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=2, padx=(5, 0))
@@ -109,7 +95,6 @@ class CatalogoInterface:
         self.entry_ano = ttk.Entry(frame_entrada, textvariable=self.var_ano)
         self.entry_ano.grid(row=5, column=1, sticky=(tk.W, tk.E), pady=2, padx=(5, 0))
         
-        # Configurar redimensionamento
         frame_entrada.grid_columnconfigure(1, weight=1)
     
     def criar_frame_botoes(self, parent):
@@ -117,7 +102,6 @@ class CatalogoInterface:
         frame_botoes = ttk.Frame(parent)
         frame_botoes.grid(row=1, column=1, sticky=(tk.W, tk.E, tk.N), padx=(10, 0))
         
-        # Botões de ação
         ttk.Button(frame_botoes, text="Adicionar", command=self.adicionar_livro,
                   style='Action.TButton').grid(row=0, column=0, pady=5, sticky=(tk.W, tk.E))
         ttk.Button(frame_botoes, text="Atualizar", command=self.atualizar_livro,
@@ -127,7 +111,6 @@ class CatalogoInterface:
         ttk.Button(frame_botoes, text="Limpar", command=self.limpar_campos,
                   style='Action.TButton').grid(row=3, column=0, pady=5, sticky=(tk.W, tk.E))
         
-        # Configurar redimensionamento
         frame_botoes.grid_columnconfigure(0, weight=1)
     
     def criar_frame_lista(self, parent):
@@ -135,58 +118,46 @@ class CatalogoInterface:
         frame_lista = ttk.LabelFrame(parent, text="Lista de Livros", padding="10")
         frame_lista.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(20, 0))
         
-        # Configurar redimensionamento
         frame_lista.grid_rowconfigure(0, weight=1)
         frame_lista.grid_columnconfigure(0, weight=1)
         
-        # Criar Treeview
         colunas = ('Código', 'Título', 'Autor', 'Gênero', 'Editora', 'Ano')
         self.tree = ttk.Treeview(frame_lista, columns=colunas, show='headings', height=15)
         
-        # Configurar cabeçalhos
         for col in colunas:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=100)
         
-        # Scrollbars
         scrollbar_v = ttk.Scrollbar(frame_lista, orient=tk.VERTICAL, command=self.tree.yview)
         scrollbar_h = ttk.Scrollbar(frame_lista, orient=tk.HORIZONTAL, command=self.tree.xview)
         self.tree.configure(yscrollcommand=scrollbar_v.set, xscrollcommand=scrollbar_h.set)
-        
-        # Posicionar elementos
+
         self.tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         scrollbar_v.grid(row=0, column=1, sticky=(tk.N, tk.S))
         scrollbar_h.grid(row=1, column=0, sticky=(tk.W, tk.E))
-        
-        # Bind para seleção
+
         self.tree.bind('<<TreeviewSelect>>', self.on_select)
     
     def criar_frame_busca(self, parent):
         """Cria o frame de busca"""
         frame_busca = ttk.LabelFrame(parent, text="Buscar Livros", padding="10")
         frame_busca.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0))
-        
-        # Configurar redimensionamento
+
         frame_busca.grid_columnconfigure(1, weight=1)
-        
-        # Campo de busca
+
         ttk.Label(frame_busca, text="Buscar por:").grid(row=0, column=0, sticky=tk.W)
-        
-        # Combobox para tipo de busca
+
         self.combo_busca = ttk.Combobox(frame_busca, values=['Título', 'Autor'], state='readonly')
         self.combo_busca.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(5, 0))
         self.combo_busca.set('Título')
-        
-        # Campo de entrada para busca
+
         self.var_busca = tk.StringVar()
         self.entry_busca = ttk.Entry(frame_busca, textvariable=self.var_busca)
         self.entry_busca.grid(row=0, column=2, sticky=(tk.W, tk.E), padx=(5, 0))
-        
-        # Botões de busca
+
         ttk.Button(frame_busca, text="Buscar", command=self.buscar_livros).grid(row=0, column=3, padx=(5, 0))
         ttk.Button(frame_busca, text="Mostrar Todos", command=self.atualizar_lista).grid(row=0, column=4, padx=(5, 0))
-        
-        # Bind para busca automática
+
         self.var_busca.trace('w', self.buscar_automatico)
     
     def criar_barra_status(self, parent):
@@ -233,7 +204,6 @@ class CatalogoInterface:
         livro.editora = self.var_editora.get().strip()
         livro.ano_publicacao = int(self.var_ano.get())
         
-        # Se há código, definir
         if self.var_codigo.get():
             livro.codigo = int(self.var_codigo.get())
         
@@ -284,7 +254,6 @@ class CatalogoInterface:
             messagebox.showwarning("Aviso", "Selecione um livro para deletar")
             return
         
-        # Confirmar exclusão
         resposta = messagebox.askyesno("Confirmar", "Tem certeza que deseja deletar este livro?")
         if not resposta:
             return
@@ -313,20 +282,16 @@ class CatalogoInterface:
         self.var_editora.set("")
         self.var_ano.set("")
         
-        # Tornar campo código readonly novamente
         self.entry_codigo.config(state='readonly')
     
     def atualizar_lista(self):
         """Atualiza a lista de livros"""
         try:
-            # Limpar lista atual
             for item in self.tree.get_children():
                 self.tree.delete(item)
             
-            # Buscar livros do banco
             livros = self.db_manager.listar_livros()
             
-            # Adicionar livros à lista
             for livro in livros:
                 self.tree.insert('', 'end', values=(
                     livro.codigo,
@@ -337,7 +302,6 @@ class CatalogoInterface:
                     livro.ano_publicacao
                 ))
             
-            # Atualizar status
             total = len(livros)
             self.atualizar_status(f"Total de livros: {total}")
             
@@ -351,7 +315,6 @@ class CatalogoInterface:
             item = self.tree.item(selection[0])
             values = item['values']
             
-            # Preencher campos com os dados selecionados
             self.var_codigo.set(values[0])
             self.var_titulo.set(values[1])
             self.var_autor.set(values[2])
@@ -374,11 +337,9 @@ class CatalogoInterface:
             else:
                 livros = self.db_manager.buscar_livros_por_autor(termo_busca)
             
-            # Limpar lista atual
             for item in self.tree.get_children():
                 self.tree.delete(item)
             
-            # Adicionar resultados
             for livro in livros:
                 self.tree.insert('', 'end', values=(
                     livro.codigo,
@@ -389,7 +350,6 @@ class CatalogoInterface:
                     livro.ano_publicacao
                 ))
             
-            # Atualizar status
             self.atualizar_status(f"Encontrados {len(livros)} livro(s) para '{termo_busca}'")
             
         except Exception as e:
@@ -397,5 +357,4 @@ class CatalogoInterface:
     
     def buscar_automatico(self, *args):
         """Busca automática conforme o usuário digita"""
-        # Aguardar um pouco para evitar muitas buscas
         self.root.after(500, self.buscar_livros) 

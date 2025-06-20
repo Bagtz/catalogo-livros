@@ -9,7 +9,6 @@ class Livro:
         self._editora = editora
         self._ano_publicacao = ano_publicacao
     
-    # Propriedades com validação
     @property
     def codigo(self):
         return self._codigo

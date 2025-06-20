@@ -2,6 +2,15 @@
 """
 Catálogo de Livros - Aplicação Principal
 Desenvolvido com Python, Tkinter e SQLite
+
+DESENVOLVEDORES:
+- Aluno 1: Ângelo de Carvalho Nunes
+- Aluno 2: Pablo Carvalho
+
+Curso: CSI-22
+Disciplina: Programação Orientada a Objetos
+Professor: Prof. Karla D. Fook
+Data: 20/06/2025
 """
 
 import tkinter as tk
@@ -9,7 +18,6 @@ from tkinter import messagebox
 import sys
 import os
 
-# Adicionar o diretório atual ao path para importar os módulos
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
@@ -22,18 +30,13 @@ except ImportError as e:
 def main():
     """Função principal que executa a aplicação"""
     try:
-        # Criar janela principal
         root = tk.Tk()
         
-        # Configurar ícone (opcional)
         try:
-            # Se houver um ícone, descomente a linha abaixo
-            # root.iconbitmap('icon.ico')
             pass
         except:
             pass
         
-        # Centralizar a janela na tela
         root.update_idletasks()
         width = 900
         height = 700
@@ -41,13 +44,10 @@ def main():
         y = (root.winfo_screenheight() // 2) - (height // 2)
         root.geometry(f'{width}x{height}+{x}+{y}')
         
-        # Definir tamanho mínimo
         root.minsize(800, 600)
         
-        # Criar a aplicação
         app = CatalogoInterface(root)
         
-        # Configurar evento de fechamento
         def on_closing():
             """Manipula o fechamento da aplicação"""
             if messagebox.askokcancel("Sair", "Deseja realmente sair do catálogo?"):
@@ -55,9 +55,8 @@ def main():
         
         root.protocol("WM_DELETE_WINDOW", on_closing)
         
-        # Exibir informações sobre a aplicação
         print("=" * 50)
-        print("    CATÁLOGO DE LIVROS - VERSÃO 1.0")
+        print("    CATÁLOGO DE LIVROS ")
         print("=" * 50)
         print("Aplicação iniciada com sucesso!")
         print("Funcionalidades disponíveis:")
@@ -69,7 +68,6 @@ def main():
         print("• Banco de dados SQLite para persistência")
         print("=" * 50)
         
-        # Iniciar loop principal da interface
         root.mainloop()
         
     except Exception as e:

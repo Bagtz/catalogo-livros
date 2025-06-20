@@ -14,7 +14,7 @@ class DatabaseManager:
         """Cria uma conexão com o banco de dados"""
         try:
             conn = sqlite3.connect(self.db_name)
-            conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
+            conn.row_factory = sqlite3.Row 
             return conn
         except sqlite3.Error as e:
             raise Exception(f"Erro ao conectar com o banco de dados: {e}")
